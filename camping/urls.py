@@ -15,5 +15,8 @@ urlpatterns = [
     path('cliente/<int:cliente_id>/reservas/', views.reservas_de_cliente_por_id , name='reservas_de_cliente_por_id'),
     
     path('recepcionistas/', views.prueba_clase , name='prueba_clase'),
+    
+    path('registro', views.registrar_usuario, name='registrar_usuario'),
+    
 ]
 

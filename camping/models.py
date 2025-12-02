@@ -3,7 +3,26 @@ from django.utils import timezone
 
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
+
+# USUARIO
+class Usuario(AbstractUser):
+    ADMINISTRADOR = 1
+    RECEPCIONISTA = 2  
+    CUIDADOR = 3
+    CLIENTE = 4
+    ROLES = (
+        (ADMINISTRADOR , 'administrador'),
+    (RECEPCIONISTA, 'recepcionista'),
+    (CUIDADOR , 'cuidador'),
+    (CLIENTE , 'cliente'),
+    )
+
+    rol = models.PositiveSmallIntegerField(
+        choices = ROLES, default=1
+    )
 
 # PERSONA
 class Persona(models.Model):
@@ -38,21 +57,28 @@ class Recepcionista(models.Model):
         ('ta', 'Tarde')
     ]
     
-    usuario = models.OneToOneField(PerfilUsuario, on_delete=models.CASCADE)
+    usuario = models.OneToOneField(Usuario, on_delete= models.CASCADE, null=True)
+    
+    perfil_usuario = models.OneToOneField(PerfilUsuario, on_delete=models.CASCADE, null = True)
     salario = models.DecimalField(max_digits=8, decimal_places=2)
     fecha_alta = models.DateField()
     turno = models.CharField(max_length=20, choices=OPCIONES_TURNO)
 
 # CUIDADOR
 class Cuidador(models.Model):
-    usuario = models.OneToOneField(PerfilUsuario, on_delete=models.CASCADE)
+    
+    usuario = models.OneToOneField(Usuario, on_delete= models.CASCADE, null=True)
+    
+    perfil_usuario = models.OneToOneField(PerfilUsuario, on_delete=models.CASCADE, null = True)
     especialidad = models.CharField(max_length=50)
     disponible_de_noche = models.BooleanField(default=False)
     puntuacion = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
 
 # CLIENTE
 class Cliente(models.Model):
-    datos_cliente = models.OneToOneField(Persona, on_delete=models.CASCADE, default="")
+    usuario = models.OneToOneField(Usuario, on_delete= models.CASCADE, null=True)
+    
+    datos_cliente = models.OneToOneField(Persona, on_delete=models.CASCADE, default="", null = True)
     numero_cuenta = models.CharField(max_length=30, blank=True, null=True)
     nacionalidad = models.CharField(max_length=50)
     acepta_publicidad = models.BooleanField(default=False)

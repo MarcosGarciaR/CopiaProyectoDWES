@@ -1,0 +1,12 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+<form action = "{% url "login" %}" method = "POST">
+{% load django_bootstrap5 %}
+
+{% csrf_token %}
+{% bootstrap_form form%}
+<button type="submit">Enviar</button>
+</form>
+{% endblock contenido %}
+

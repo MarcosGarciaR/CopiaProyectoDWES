@@ -9,6 +9,69 @@ def index(request):
 
 
 
-
+en principal.html
+agregar 
+    <p>Fecha Inicio:
+</br>
+{{ request.session.fecha_inicio }}
+</p>
   
+
+
+en models agregar
+class Usuario(AbstractUser):
+    ADMINISTRADOR = 1
+    RECEPCIONISTA = 2  
+    CUIDADOR = 3
+    CLIENTE = 4
+    ROLES = (
+        (ADMINISTRADOR , 'administrador'),
+    (RECEPCIONISTA, 'recepcionista'),
+    (CUIDADOR , 'cuidador'),
+    (CLIENTE , 'cliente'),
+    )
+
+    rol = models.PositiveSmallIntegerField(
+        choices = ROLES, fault=1
+    )
+
+
+en settings
+AUTH_USER_MODEL = 'camping.Usuario'
+
+
+en las clases de los usuarios (recepcionista, cuidador, cliente)
+agregar la linea 
+    usuario = models.OneToOneField(Usuario, on_delete= models.CASCADE, null=True)
+    
+makemigrations - migrate
+
+
+
+en forms.py crear formulario de registro
+
+from django.contrib.auth.forms import UserCreationForm
+
+class RegistroForm(UserCreationForm):
+    roles = (
+    (Usuario.RECEPCIONISTA, 'recepcionista'),
+    (Usuario.CUIDADOR , 'cuidador'),
+    (Usuario.CLIENTE , 'cliente'),
+)
+
+    rol = forms.ChoiceField(choices=roles)
+    class Meta:
+        model = Usuario
+        fields = ('username', 'email', 'password1', 'password2', 'rol')
+
+
+en URLs indicar un path
+
+
+
+    
+En MYSITE URLS
+path('accounts/', include('django.contrib.auth.urls')),
+
+
 

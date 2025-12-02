@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import *
+from .forms import *
 from django.db.models import Avg, Max, Min, Q, Prefetch
 from django.views.defaults import page_not_found
+from django.contrib import messages
 
-
+from datetime import datetime 
+from django.contrib.auth import login
+from django.contrib.auth.decorators import permission_required
 # Create your views here.
 
 def index(request):
@@ -38,6 +42,8 @@ def ver_reservas_por_fecha(request):
 
 
 #   Ver la reserva cuyo ID se pasa por la URL
+
+permission_required('camping.view_reserva')
 def ver_reserva_por_id(request, id_reserva):
     reserva = Reserva.objects.select_related('cliente__datos_cliente').prefetch_related("actividades").get(id=id_reserva)
     
@@ -177,3 +183,31 @@ def prueba_clase(request):
     #                                            + "WHERE cr.salario = 1968.15 AND cr.turno = 'ma' "
                                                 + "JOIN camping_perfilusuario cpu ON cr.usuario_id = cpu.id ")
     return render(request, 'URLs/recepcionistas.html', {'recepcionistas':recepcionistas})
+
+
+
+def registrar_usuario(request):
+    if(request.method == 'POST'):
+        formulario = RegistroForm(request.POST)
+        if formulario.is_valid():
+            user = formulario.save()
+            rol = int(formulario.cleaned_data.get('rol'))
+
+            if rol == Usuario.RECEPCIONISTA:
+                recepcionista = Recepcionista.objects.create(usuario = user, salario=300, fecha_alta = '2003-11-07', turno ='ma')
+                recepcionista.save()
+                
+            elif rol == Usuario.CUIDADOR:
+                cuidador = Cuidador.objects.create(usuario = user)
+                cuidador.save()
+                
+            elif rol == Usuario.CLIENTE:
+                cliente = Cliente.objects.create(usuario = user)
+                cliente.save()
+                
+            login(request, user)
+            return redirect('index')
+    else:
+        formulario = RegistroForm()
+        
+    return render(request, 'URLs/pruebaFormulario.html', {'formulario':formulario})
