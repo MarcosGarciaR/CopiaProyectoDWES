@@ -1,0 +1,15 @@
+{% extends "principal.html" %}
+{% block contenido %}
+    <ul>
+        {% for reserva in mostrar_reservas %}
+        <li>
+            {% include 'Plantillas_Modelos/reserva_sin_actividades.html' %}
+        </li>
+        <hr>
+        <br>
+        {% empty %}
+        <li>No hay reservas que cumplan los requisitos</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

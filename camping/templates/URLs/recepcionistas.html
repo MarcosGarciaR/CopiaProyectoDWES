@@ -1,0 +1,14 @@
+{% extends "principal.html" %}
+{% block contenido %}
+    <ul>
+        {% for recepcionista in recepcionistas %}
+        <li>
+        {% include 'Plantillas_Modelos/recepcionistas.html' %}
+        </li>
+        <hr>
+        <br>
+        {% empty %}
+        <li>No hay personas</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
