@@ -1,0 +1,17 @@
+{% extends 'principal.html' %}
+{% block contenido %}
+    {% include 'URLs/clientes/clientes.html' %}
+    <br>
+    <h1>RESERVAS</h1>
+    <ul>
+        {% for reserva in cliente.reservas.all %}
+        <li>
+            {% include 'URLs/reservas/reservas.html' %}
+        </li>
+        <hr>
+        <br>
+        {% empty %}
+        <li>Este cliente no tiene reservas.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -2,11 +2,10 @@ from django.db import models
 from django.utils import timezone
 
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import AbstractUser 
 
 
-from django.contrib.auth.models import AbstractUser
 # Create your models here.
-
 # USUARIO
 class Usuario(AbstractUser):
     ADMINISTRADOR = 1
@@ -23,65 +22,49 @@ class Usuario(AbstractUser):
     rol = models.PositiveSmallIntegerField(
         choices = ROLES, default=1
     )
-
+    
 # PERSONA
 class Persona(models.Model):
+    
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
     dni = models.CharField(max_length=20, unique=True)
     fecha_nacimiento = models.DateField()
-    email = models.EmailField(unique=True, default="")
     telefono = models.CharField(max_length=20, default="")
-
-# PERFIL DE USUARIO
-class PerfilUsuario(models.Model):
-    OPCIONES_ROL = [
-        ('recepcionista', 'Recepcionista'),
-        ('cuidador', 'Cuidador')
-    ]
+    fecha_registro = models.DateTimeField(auto_now_add=True, null=True)
     
-    datos_usuario = models.OneToOneField(Persona, on_delete=models.CASCADE, default="")
-    username = models.CharField(max_length=50, unique=True, default="")
-    password = models.CharField(max_length=128)
-    es_staff = models.BooleanField(default=False)
-    if(es_staff):
-        rol = models.CharField(max_length=20, choices=OPCIONES_ROL)
-    else:
-        rol = models.CharField(max_length=20, default='cliente')
-    fecha_registro = models.DateTimeField(default=timezone.now)
-
+    def __str__(self):
+        return f"{self.nombre} {self.apellido} - {self.dni}"    
+    
 # RECEPCIONISTA
 class Recepcionista(models.Model):
     OPCIONES_TURNO = [
         ('ma', 'Mañana'),
         ('ta', 'Tarde')
     ]
-    
     usuario = models.OneToOneField(Usuario, on_delete= models.CASCADE, null=True)
     
-    perfil_usuario = models.OneToOneField(PerfilUsuario, on_delete=models.CASCADE, null = True)
-    salario = models.DecimalField(max_digits=8, decimal_places=2)
-    fecha_alta = models.DateField()
-    turno = models.CharField(max_length=20, choices=OPCIONES_TURNO)
-
+    datos_persona = models.OneToOneField(Persona, on_delete=models.CASCADE)
+    salario = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    turno = models.CharField(max_length=20, choices=OPCIONES_TURNO, blank=True, null=True)
+    
 # CUIDADOR
 class Cuidador(models.Model):
-    
     usuario = models.OneToOneField(Usuario, on_delete= models.CASCADE, null=True)
     
-    perfil_usuario = models.OneToOneField(PerfilUsuario, on_delete=models.CASCADE, null = True)
-    especialidad = models.CharField(max_length=50)
-    disponible_de_noche = models.BooleanField(default=False)
-    puntuacion = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    datos_persona = models.OneToOneField(Persona, on_delete=models.CASCADE, blank=True, null=True)
+    especialidad = models.CharField(max_length=50, blank=True, null=True)
+    disponible_de_noche = models.BooleanField(default=False, blank=True, null=True)
+    puntuacion = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)], default=5)
 
 # CLIENTE
 class Cliente(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete= models.CASCADE, null=True)
     
-    datos_cliente = models.OneToOneField(Persona, on_delete=models.CASCADE, default="", null = True)
+    datos_persona = models.OneToOneField(Persona, on_delete=models.CASCADE, default="")
     numero_cuenta = models.CharField(max_length=30, blank=True, null=True)
-    nacionalidad = models.CharField(max_length=50)
-    acepta_publicidad = models.BooleanField(default=False)
+    nacionalidad = models.CharField(max_length=50, blank=True, null=True)
+    acepta_publicidad = models.BooleanField(default=False, blank=True, null=True)
 
 
 
@@ -92,14 +75,20 @@ class Camping(models.Model):
     ubicacion = models.CharField(max_length=200)
     estrellas = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     sitio_web = models.URLField(null=True, blank=True)
+    
+    def __str__(self):
+        return self.nombre
 
 # PARCELA
 class Parcela(models.Model):
     camping = models.ForeignKey(Camping, on_delete=models.CASCADE)
     numero = models.IntegerField(unique=False)
-    capacidad = models.PositiveIntegerField(default=2)
+    capacidad = models.PositiveIntegerField(default=2, validators=[MinValueValidator(1), MaxValueValidator(25)])
     tiene_sombra = models.BooleanField(default=False)
-
+    
+    def __str__(self):
+            return f"Parcela {self.numero} - {self.camping.nombre}"
+        
 # VEHÍCULO
 class Vehiculo(models.Model):
     OPCIONES_VEHICULO = [

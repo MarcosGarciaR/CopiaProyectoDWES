@@ -1,0 +1,36 @@
+{% extends "principal.html" %}
+
+{% block cabecera_extra %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'javascript/javascript_prueba.js' %}" ></script>
+{% endblock %}
+
+{% block titulo %}
+    <title>Recepcionistas</title>
+{% endblock %}
+
+{% block contenido %}
+
+<div class="bg-body-secondary" id="botones_cabecera" >
+    <button><a href="{% url "crear_recepcionista" %}">Crear recepcionista</a></button>
+    <button><a href="{% url "buscar_recepcionistas" %}" >Buscar recepcionistas</a></button>
+</div>
+    <br>
+
+    {% if texto_busqueda %}
+        <p>{{texto_busqueda}}</p>
+    {% endif %}
+
+
+    <ul>
+        {% for recepcionista in recepcionistas %}
+        <li>
+        {% include 'URLs/recepcionistas/recepcionistas_plantilla.html' %}
+        </li>
+        <hr>
+        <br>
+        {% empty %}
+        <li>No hay personas</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

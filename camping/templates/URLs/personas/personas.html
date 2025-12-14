@@ -1,0 +1,20 @@
+<div>
+    <h2>{{ persona.nombre }} {{ persona.apellido}}</h2>
+    <p>DNI: {{ persona.dni }}</p>
+    <p>E-mail: {{ persona.email }} </p>
+</div>
+<div class="row btn-group">
+    <div class="mb-2">
+        {% if request.user.is_authenticated %}
+        <button type="button" class="btn btn-outline-primary">
+            <a href="{% url 'editar_persona' persona.id %}"><span>Editar</span></a>
+        </button>
+        <form action="{% url 'eliminar_persona' persona.id %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger" type="submit" onclick='return eliminarPersona()'>
+                <span>Eliminar</span>
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</div>

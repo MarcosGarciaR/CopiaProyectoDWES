@@ -1,0 +1,30 @@
+{% extends "principal.html" %}
+{% block titulo %}
+    <title>Parcelas</title>
+{% endblock %}
+
+{% block cabecera_extra %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'javascript/javascript_prueba.js' %}" ></script>
+{% endblock %}
+
+{% block contenido %}
+    <button><a href="{% url "crear_parcela" %}">Crear parcela</a></button>
+    <button><a href="{% url "buscar_parcelas" %}" >Buscar parcelas</a></button>
+    
+    {% if texto_busqueda %}
+    <p>{{texto_busqueda}}</p>
+    {% endif %}
+    
+<ul>
+    {% for parcela in mostrar_parcelas %}
+    <li>
+        {% include 'URLs/parcelas/parcela.html'%}
+    </li>
+    <hr>
+    <br>
+    {% empty %}
+        <p>No hay parcelas disponibles</p>
+    {% endfor %}
+</ul>
+{% endblock %}

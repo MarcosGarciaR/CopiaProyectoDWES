@@ -1,0 +1,8 @@
+{% extends "principal.html" %} {% block contenido %}
+
+<form action= "{% url 'eliminar_persona' persona.id %}" method = "POST">
+    {% include "URLs/plantilla_form.html" %}
+</form>
+
+{% endblock %}
+

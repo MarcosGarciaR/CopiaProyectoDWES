@@ -1,0 +1,33 @@
+{% extends "principal.html" %}
+
+{% block cabecera_extra %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'javascript/javascript_prueba.js' %}" ></script>
+{% endblock %}
+
+{% block titulo %}
+    <title>Campings</title>
+{% endblock %}
+
+{% block contenido %}
+<div class="bg-body-secondary" id="botones_cabecera" >
+    <button class="btn  btn-light"> <a href="{% url "crear_camping" %}">Crear camping</a> </button>
+    <button class="btn  btn-light"> <a href="{% url "buscar_campings" %}" >Buscar campings</a></button>
+</div>
+    <br>
+    {% if texto_busqueda %}
+        <p>{{texto_busqueda}}</p>
+    {% endif %}
+
+<ul>
+    {% for camping in mostrar_campings %}
+    <li>
+        {% include 'URLs/campings/mostrar_camping.html'%}
+    </li>
+    <hr>
+    <br>
+    {% empty %}
+        <p>No hay campings disponibles</p>
+    {% endfor %}
+</ul>
+{% endblock %}

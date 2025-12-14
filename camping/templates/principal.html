@@ -1,61 +1,38 @@
+{% load django_bootstrap5 %}
+
 <html>
     {% load static %}
     <head>
         {% block titulo %}
         <title>CampNatur</title>
         {% endblock %}
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
         <link rel="stylesheet" href="{% static 'css/cabecera.css' %}"/>
-
-        <script src="{% static 'javascript/javascript_prueba.js' %}"></script>
+        
+        <script src="{% static 'javascript/Desplegables.js' %}"></script>
     </head>
-
-<header>
+<header >
     {% block cabecera %}
         <div id="cabecera">
             <img src="{% static 'imagenes/logo_web.png' %}" href="index.html">
             <h1>Gestión de campings</h1>
         </div>
-        <div>
-            {% if not request.user.is_authenticated %}
-            <a href="{% url "login" %}">Login</a>
-            {% endif %}
-            {% if not request.user.is_authenticated %}
-            <a href="{% url "registrar_usuario" %}">
-                Registrarse
-            </a>
-            {% endif %}
-
-            {% if request.user.is_authenticated %}
-            <form action="{% url "logout" %}" method="POST">
-                {% csrf_token %}
-                <button type="submit">Cerrar sesion</button>
-            </form>
-            {% endif %}
-
-
-        </div>
-
-        <hr>
-        {% include "cabecera_urls.html" %}
-        <hr>
     {% endblock %}
+    
+    {% block cabecera_extra %}
+    {% endblock %}
+    
 </header>
-
+    {% include "cabecera_urls.html" %}
 <body>
+    {% bootstrap_messages %}
     {% block contenido %}
     {% endblock %}
-
-    <p>Fecha Inicio:
-</br>
-{{ request.session.fecha_inicio }}
-</p>
-
 </body>
-
 <footer>
     <a href="https://docs.djangoproject.com/en/5.1/ref/templates/builtins/"></a>
     {% include "pie_de_pag.html" %}
 </footer>
 
 </html>
-

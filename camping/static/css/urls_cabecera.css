@@ -1,26 +1,59 @@
-/* Estilos generales del menú */
 #lista_urls {
-    background-color: #2c3e50;
-    font-family: Arial, sans-serif;
-}
-
-#lista_urls ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex; 
-    justify-content: center;
-}
-
-#lista_urls ul li a {
     display: flex;
-    flex-wrap: wrap;
-    color: white;
-    text-decoration: none;
-    padding: 14px 20px;
-    transition: background 0.3s;
+    justify-content: center;
+    gap: 20px;
+    background-color: rgb(44, 62, 80); /* Fondo cabecera */
+    padding: 15px;
 }
 
-#lista_urls ul li a:hover {
-    background-color: #34495e;
+/* Botones del menú */
+#lista_urls .btn {
+    background-color: rgb(44, 62, 80);
+    border-color: rgb(44, 62, 80);
+    color: white;
+}
+
+#lista_urls .btn:hover, #lista_urls .btn:focus {
+    background-color: rgb(38, 53, 69);
+    border-color: rgb(38, 53, 69);
+    color: white;
+}
+
+/* Menú desplegable */
+.dropdown-menu {
+    background-color: rgb(44, 62, 80);
+    color: white;
+    border: none;
+}
+
+/* Items del submenu */
+.dropdown-item {
+    color: white;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+    background-color: rgb(38, 53, 69);
+    color: white;
+}
+
+/* Submenús laterales */
+.dropdown-menu .dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-menu .dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    background-color: rgb(44, 62, 80);
+    margin-left: .1rem;
+    margin-right: .1rem;
+}
+
+/* Flecha de submenú (si la agregas con dropdown-toggle) */
+.dropdown-toggle::after {
+    color: white;
+}
+#botones_cabecera {
+    text-align: center;
+    padding: 10px;
 }

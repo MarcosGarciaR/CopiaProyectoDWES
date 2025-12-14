@@ -1,0 +1,22 @@
+{% extends "principal.html" %}
+{% block contenido %}
+    {% include 'URLs/clientes/clientes.html' %}
+    <br>
+    {% include 'URLs/reservas/reservas.html'%}
+    <br>
+    <h2>Actividades contratadas</h2>
+    {% if reserva.actividades.all %}
+    <ul>
+        {% for actividad in reserva.actividades.all %}
+        <li>
+            {% include 'URLs/actividades/actividades.html' %}
+        </li>
+        <br>
+        {% empty %}
+        <li>No hay actividades contratadas para esta reserva.</li>
+        {% endfor%}
+    </ul>
+    {% else %}
+    <p>No hay actividades contratadas para esta reserva.</p>
+    {% endif %}
+{% endblock %}

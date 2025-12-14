@@ -1,0 +1,33 @@
+{% extends "principal.html" %}
+{% block titulo %}
+<title>Personas</title>
+{% endblock %}
+
+{% block cabecera_extra %}
+{% load static %}
+<script type="text/javascript" src="{% static 'javascript/javascript_prueba.js' %}"></script>
+{% endblock %}
+
+{% block contenido %}
+{% if request.user.is_authenticated %}
+<button><a href="{% url 'crear_persona' %}">Crear nueva Persona</a></button>
+{% endif %}
+<button><a href="{% url 'buscar_personas' %}">Buscar Personas</a></button>
+
+{% if texto_busqueda %}
+<p>{{texto_busqueda}}</p>
+{% endif %}
+
+
+<ul>
+    {% for persona in mostrar_personas %}
+    <li>
+        {% include 'URLs/personas/personas.html'%}
+    </li>
+    <hr>
+    <br>
+    {% empty %}
+    <p>No hay personas disponibles</p>
+    {% endfor %}
+</ul>
+{% endblock %}

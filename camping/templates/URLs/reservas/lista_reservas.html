@@ -1,0 +1,19 @@
+{% extends "principal.html" %}
+{% block contenido %}
+
+{% if request.user.is_authenticated %}
+<button><a href="{% url 'crear_reserva' %}">Crear nueva reserva</a></button>
+{% endif %}
+
+        <ul>
+    {% for reserva in mostrar_reservas %}
+        <li>
+            {% include 'URLs/reservas/reservas.html' %}
+        </li>
+        <hr>
+        <br>
+    {% empty %}
+        <p>Aún no hay reservas</p>
+    {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "principal.html" %} {% block contenido %}
+<form action = "{% url 'buscar_parcelas' %}" method = "GET">
+    {% include "URLs/plantilla_form.html" %}
+</form>
+
+{% endblock %}
